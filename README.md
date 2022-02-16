@@ -7,5 +7,5 @@
 ```
 특정커밋
 ```
-<script src="http://cdn.jsdelivr.net/gh/ospace/ographic@71c9f82/lib/pixcelcanvas.js"></script>
+<script src="http://cdn.jsdelivr.net/gh/ospace/ographic@258994d/lib/pixcelcanvas.js"></script>
 ```
