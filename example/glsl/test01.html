@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>test01 perline noise</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <p>
+  <div>
+    <button onclick="stopJob()">stop</button>
+    <button onclick="test1()">test1</button>
+    <button onclick="test2()">test2</button>
+    <button onclick="test3()">test3</button>
+    <br />
+    <canvas id="canvas1" width="510" height="300"></canvas>
+  </div>
+  <div>
+  <script language="JavaScript">
+    const ctxCanvas1 = canvas1.getContext("2d");
+      const width = canvas1.width;
+      const height = canvas1.height;
+
+      function ellipse(x, y, rX, rY) {
+        ctxCanvas1.beginPath();
+        ctxCanvas1.ellipse(x, y, rX, rY || rX, Math.PI, 0, 2 * Math.PI);
+        ctxCanvas1.stroke();
+      }
+
+      function random(max) {
+        return Math.floor(Math.random() * max);
+      }
+
+      let job;
+
+      function stopJob() {
+        if (!job) return;
+        clearInterval(job);
+        job = undefined;
+      }
+
+      function render(action) {
+        stopJob();
+        job = setInterval(() => {
+          canvas1.width = width;
+          action();
+        }, 50);
+      }
+
+      function test1() {
+        render(() => {
+          let x = random(width);
+          ellipse(x, height / 2, 40);
+        });
+      }
+
+      const grid = [];
+      const gridSize = 256;
+      // const sampleGrid = [
+      //   [1, 0],
+      //   [0, 1],
+      //   [-1, 0],
+      //   [0, -1],
+      // ];
+      const sampleGrid = [
+        [1, 0],
+        [-1, 0],
+      ];
+
+      for (let i = 0, n = gridSize; i < n; ++i) {
+        grid.push(sampleGrid[random(sampleGrid.length)]);
+      }
+
+      function dot(l, r) {
+        return l[0] * r[0] + l[1] * r[1];
+      }
+
+      function noise(x, y) {
+        let ix = Math.floor(x);
+        let fx = x - ix;
+        ix %= gridSize;
+        /*
+          2-D: index = x + gridSize * y
+          grid 4 points:
+          1) x + gridSize * y
+          2) x + 1 + gridSize * y
+          3) x + gridSize * (y + 1)
+          4) x + 1 + gridSize * (y + 1)
+        */
+        // gridents
+        const gridL = grid[ix];
+        const gridR = grid[ix + 1];
+
+        // distance vector
+        /*
+          1) fx, fy
+          2) fx - 1, fy
+          3) fx, fy - 1
+          4) fx - 1, fy - 1
+        */
+        const distL = [fx, 0];
+        const distR = [fx - 1, 0];
+
+        const fL = dot(gridL, distL);
+        const fR = dot(gridR, distR);
+
+        fx = smooth(fx);
+
+        const ret = lerp(fL, fR, fx);
+
+        return ret;
+      }
+
+      function noise2(x, y) {
+        let ix = Math.floor(x);
+        let fx = x - ix;
+        ix %= gridSize;
+
+        let iy = Math.floor(y);
+        let fy = y - iy;
+        iy %= gridSize;
+
+        /*
+          2-D: index = x + gridSize * y
+          grid 4 points:
+          1) x + gridSize * y
+          2) x + 1 + gridSize * y
+          3) x + gridSize * (y + 1)
+          4) x + 1 + gridSize * (y + 1)
+        */
+        // gridents
+        const gridLT = grid[ix];
+        const gridLB = grid[ix];
+        const gridRT = grid[ix + 1];
+        const gridRB = grid[ix + 1];
+
+        // distance vector
+        /*
+          1) fx, fy
+          2) fx - 1, fy
+          3) fx, fy - 1
+          4) fx - 1, fy - 1
+        */
+        const distL = [fx];
+        const distR = [fx - 1];
+
+        const fL = dot(gridL, distL);
+        const fR = dot(gridR, distR);
+
+        fx = smooth(fx);
+
+        const ret = lerp(fL, fR, fx);
+
+        return ret;
+      }
+
+      function lerp(l, r, f) {
+        return l + f * (r - l);
+      }
+
+      // 6 * t^5 - 15 * t^4 + 10 * t^3
+      function smooth(t) {
+        return t * t * t * (t * (t * 6 - 15) + 10);
+      }
+
+      let t = 0.0;
+      function test2() {
+        render(() => {
+          let x = noise((t += 0.02));
+          x = x * width;
+          ellipse(x, height / 2, 40);
+        });
+      }
+
+      function test3() {
+        let x0 = 0, y0 = height/2, y1;
+        let t = 0.0;
+        for(let i=1; i<width; ++i) {
+          y1  = noise(t += 0.0301) * height/2 + height/2;
+          line(x0, y0, i, y1);
+          x0 = i;
+          y0 = y1;
+        }
+      }
+
+      function line(x0, y0, x1, y1) {
+        ctxCanvas1.beginPath();
+        ctxCanvas1.moveTo(x0, y0);
+        ctxCanvas1.lineTo(x1, y1);
+        ctxCanvas1.stroke();
+      }
+  </script>
+</body>
+</html>

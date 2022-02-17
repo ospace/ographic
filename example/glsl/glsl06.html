@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>glsl06</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="../src/glsl.js"></script>
+    <!-- https://thebookofshaders.com/06/?lan=kr -->
+    <script type="x-shader/x-fragment">
+      #ifdef GL_ES
+      precision mediump float;
+      #endif
+      uniform float u_time;
+      void main() {
+        gl_FragColor = vec4(abs(sin(u_time)),0.0,0.0,1.0);
+      }
+    </script>
+    <script type="x-shader/x-fragment">
+      #ifdef GL_ES
+      precision mediump float;
+      #endif
+      uniform vec2 u_resolution;
+      void main() {
+        vec2 st = gl_FragCoord.xy/u_resolution;
+        gl_FragColor = vec4(st.x,st.y,0.0,1.0);
+      }
+    </script>
+    <script type="x-shader/x-fragment">
+      #ifdef GL_ES
+      precision mediump float;
+      #endif
+      uniform vec2 u_resolution;
+      uniform vec2 u_mouse;
+      void main() {
+        vec2 st = gl_FragCoord.xy/u_resolution;
+        vec2 st2 = u_mouse/u_resolution;;
+        gl_FragColor = vec4(st.x,st.y,st2.x,st2.y);
+      }
+    </script>
+    <script>
+      var glsls = [];
+
+      function createCanvas(size = 200) {
+        var canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 200;
+        document.body.append(canvas);
+        return canvas;
+      }
+
+      var fragments = document.querySelectorAll(
+        'script[type="x-shader/x-fragment"]'
+      );
+
+      Array.prototype.forEach.call(fragments, function (it) {
+        let source = it && it.innerHTML;
+        let canvas = createCanvas();
+        var glsl = new o.glsl(canvas);
+        glsls.push(glsl);
+        glsl.load(source);
+      });
+    </script>
+  </body>
+</html>
