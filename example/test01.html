@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>test01 particleCanvas</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <p>
+  <div>
+    <canvas id="canvas1" width="500" height="500"></canvas>
+  </div>
+  <div>
+  <script src="../lib/particlecanvas.js"></script>
+  <script src="../lib/utils.js"></script>
+  <script>
+    const tiles = 3;
+    const random = o.random2(121.345, 4321.987);
+
+    function noise(x, y) {
+      let ix = Math.floor(x);
+      let fx = x - ix;
+      let iy = Math.floor(y);
+      let fy = y - iy;
+      const a = random(ix * 2.3 + iy * 6.7);
+      const b = random((ix + 1) * 2.3 + iy * 6.7);
+      const c = random(ix * 2.3 + (iy + 1) * 6.7);
+      const d = random((ix + 1) * 2.3 + (iy + 1) * 6.7);
+      fx = fx * fx * (3 - 2 * fx);
+      fy = fy * fy * (3 - 2 * fy);
+      return o.mix(a, b, fx) + o.mix((c - a) * fy, (d - b) * fy, fx);
+    }
+
+    function field(x, y) {
+      const m = noise((tiles * x) / canvas1.width, (tiles * y) / canvas1.height);
+      const q = m * Math.PI * 2;
+      return [Math.cos(q), Math.sin(q), m];
+    }
+
+    new ParticleCanvas(canvas1, field, {particles:1000}).render();
+  </script>
+</body>
+</html>
