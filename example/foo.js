@@ -350,7 +350,7 @@ Object.assign(MotionDisplay.prototype, {
     }
 });
 
-const mapProjection = new ScaledAlbertsProjection(...);
+const mapProjection = new ScaledAlbertsProjection(/*...*/);
 const numParticles = 3500;
 
 const unzoom = getElementById('unzoom');
