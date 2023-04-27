@@ -65,8 +65,10 @@
         ["o.intersect({x:0,y:0,w:10,h:10}, {x:11,y:5})", false],
         ["o.include({x:0,y:0,w:10,h:10}, {x:3,y:3,w:7,h:7})", true],
         ["o.include({x:0,y:0,w:10,h:10}, {x:5,y:5,w:10,h:10})", false],
+        ["o.clone(foo, {value:100})", "-"],
       ];
 
+      const foo = { id: "foo", value: 10 };
       let no = 0;
       tests.forEach((it) => addResult(++no, it[0], evalObject(it[0]), it[1]));
 
@@ -98,10 +100,10 @@
         td.appendChild(document.createTextNode(test));
         tr.appendChild(td);
         td = document.createElement("td");
-        td.appendChild(document.createTextNode(result));
+        td.appendChild(document.createTextNode(JSON.stringify(result)));
         tr.appendChild(td);
         td = document.createElement("td");
-        td.appendChild(document.createTextNode(expected));
+        td.appendChild(document.createTextNode(JSON.stringify(expected)));
         tr.appendChild(td);
 
         results.appendChild(tr);
