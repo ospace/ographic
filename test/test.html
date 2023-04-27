@@ -27,23 +27,31 @@
       .fail {
         background-color: red;
       }
+      #paint {
+        border: solid 1px;
+        width: 100%;
+        height: 200px;
+      }
     </style>
   </head>
   <body>
     <div class="wrapper">
-      <table width="100%" cellspacing="0">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Test</th>
-            <th>Result</th>
-            <th>Expected</th>
-          </tr>
-        </thead>
-        <tbody id="results">
-          <tr></tr>
-        </tbody>
-      </table>
+      <div>
+        <table width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Test</th>
+              <th>Result</th>
+              <th>Expected</th>
+            </tr>
+          </thead>
+          <tbody id="results">
+            <tr></tr>
+          </tbody>
+        </table>
+        <canvas id="paint"></canvas>
+      </div>
     </div>
     <script src="../lib/utils.js"></script>
     <script>
@@ -61,6 +69,18 @@
 
       let no = 0;
       tests.forEach((it) => addResult(++no, it[0], evalObject(it[0]), it[1]));
+
+      const WIDTH = paint.offsetWidth;
+      const HEIGHT = paint.offsetHeight;
+      const CTX = paint.getContext("2d");
+
+      let ani = new o.animate(function (dt) {
+        CTX.clearRect(0, 0, WIDTH, HEIGHT);
+        CTX.fillText(new Date().toISOString() + " - " + dt, 10, 20);
+      });
+
+      ani.start();
+      setTimeout(() => ani.stop(), 3 * 1000);
 
       function evalObject(data) {
         return new Function("return " + data)();
