@@ -61,10 +61,10 @@
         ["o.rotate(Math.PI*0.25,0,1)", "-"],
         ["o.overlap({x:0,y:0,w:10,h:10}, {x:5,y:5,w:10,h:10})", true],
         ["o.overlap({x:0,y:0,w:10,h:10}, {x:10,y:5,w:10,h:10})", false],
-        ["o.intersect({x:0,y:0,w:10,h:10}, {x:5,y:5})", true],
-        ["o.intersect({x:0,y:0,w:10,h:10}, {x:11,y:5})", false],
-        ["o.include({x:0,y:0,w:10,h:10}, {x:3,y:3,w:7,h:7})", true],
-        ["o.include({x:0,y:0,w:10,h:10}, {x:5,y:5,w:10,h:10})", false],
+        ["o.includePoint({x:0,y:0,w:10,h:10}, {x:5,y:5})", true],
+        ["o.includePoint({x:0,y:0,w:10,h:10}, {x:11,y:5})", false],
+        ["o.includeArea({x:0,y:0,w:10,h:10}, {x:3,y:3,w:7,h:7})", true],
+        ["o.includeArea({x:0,y:0,w:10,h:10}, {x:5,y:5,w:10,h:10})", false],
         ["o.clone(foo, {value:100})", "-"],
       ];
 
